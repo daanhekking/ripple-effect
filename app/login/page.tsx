@@ -74,6 +74,15 @@ export default function LoginPage() {
                             Sign In
                         </Button>
                     </Form.Item>
+
+                    <div style={{ textAlign: 'center', marginTop: 16 }}>
+                        <Text type="secondary">
+                            Don't have an account?{' '}
+                            <a href="/signup" style={{ color: '#5a7ec4', fontWeight: 600 }}>
+                                Sign up
+                            </a>
+                        </Text>
+                    </div>
                 </Form>
             </Card>
         </div>
