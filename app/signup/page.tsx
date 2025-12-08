@@ -26,13 +26,18 @@ export default function SignupPage() {
 
             if (result?.error) {
                 message.error(result.error);
+                setLoading(false);
             }
             // If no error, the redirect will happen automatically
         } catch (error) {
-            console.error('Signup error:', error);
-            message.error('An unexpected error occurred during signup');
-        } finally {
-            setLoading(false);
+            // NEXT_REDIRECT is not an error - it's how Next.js handles redirects
+            // Only log actual errors
+            if (error instanceof Error && error.message !== 'NEXT_REDIRECT') {
+                console.error('Signup error:', error);
+                message.error('An unexpected error occurred during signup');
+                setLoading(false);
+            }
+            // If it's NEXT_REDIRECT, let it propagate (don't set loading to false)
         }
     };
 
