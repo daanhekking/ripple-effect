@@ -1,22 +1,48 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Form, Input, Button, Card, Typography, Checkbox, App, Alert } from 'antd';
 import { UserOutlined, KeyOutlined } from '@ant-design/icons';
 import { useSearchParams } from 'next/navigation';
 import { login } from '@/lib/actions';
-// We use useFormStatus from react-dom which is available in Nextjs 14+ (this is Next 16 so ok)
-// But for Ant Design form onFinish, we need to bridge it.
 
 const { Title, Text } = Typography;
+
+function LoginAlerts() {
+    const searchParams = useSearchParams();
+    const signupSuccess = searchParams.get('signup') === 'success';
+    const confirmationError = searchParams.get('error') === 'confirmation_failed';
+
+    return (
+        <>
+            {signupSuccess && (
+                <Alert
+                    message="Check your email"
+                    description="We've sent you a confirmation link. Please check your email to verify your account before signing in."
+                    type="info"
+                    showIcon
+                    closable
+                    style={{ marginBottom: 16, textAlign: 'left' }}
+                />
+            )}
+
+            {confirmationError && (
+                <Alert
+                    message="Confirmation failed"
+                    description="There was an error confirming your email. Please try signing up again or contact support."
+                    type="error"
+                    showIcon
+                    closable
+                    style={{ marginBottom: 16, textAlign: 'left' }}
+                />
+            )}
+        </>
+    );
+}
 
 export default function LoginPage() {
     const [loading, setLoading] = React.useState(false);
     const { message } = App.useApp();
-    const searchParams = useSearchParams();
-
-    const signupSuccess = searchParams.get('signup') === 'success';
-    const confirmationError = searchParams.get('error') === 'confirmation_failed';
 
     const onFinish = async (values: { email: string; token: string; remember: boolean }) => {
         setLoading(true);
@@ -49,27 +75,9 @@ export default function LoginPage() {
                 <Title level={2} style={{ color: '#2f3a3d', marginBottom: 8 }}>The Ripple Effect</Title>
                 <Text type="secondary" style={{ display: 'block', marginBottom: 32 }}>Nurture each ripple of growth</Text>
 
-                {signupSuccess && (
-                    <Alert
-                        message="Check your email"
-                        description="We've sent you a confirmation link. Please check your email to verify your account before signing in."
-                        type="info"
-                        showIcon
-                        closable
-                        style={{ marginBottom: 16, textAlign: 'left' }}
-                    />
-                )}
-
-                {confirmationError && (
-                    <Alert
-                        message="Confirmation failed"
-                        description="There was an error confirming your email. Please try signing up again or contact support."
-                        type="error"
-                        showIcon
-                        closable
-                        style={{ marginBottom: 16, textAlign: 'left' }}
-                    />
-                )}
+                <Suspense fallback={null}>
+                    <LoginAlerts />
+                </Suspense>
 
                 <Form
                     name="login"
