@@ -25,6 +25,7 @@ export async function signup(formData: FormData) {
         email,
         password,
         options: {
+            emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://ripple-effect-theta.vercel.app'}/auth/confirm`,
             data: {
                 full_name: name,
                 role: role || 'employee',
