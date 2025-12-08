@@ -16,11 +16,15 @@ export default async function Dashboard() {
   }
 
   // Fetch active questions
-  const { data: questions } = await supabase
+  const { data: questions, error: questionsError } = await supabase
     .from('questions')
     .select('id, text')
     .eq('is_active', true)
     .order('created_at', { ascending: true });
+
+  if (questionsError) {
+    console.error('Error fetching questions:', questionsError);
+  }
 
   const email = user.email;
 

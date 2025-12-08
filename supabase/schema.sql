@@ -43,8 +43,16 @@ create table if not exists public.questions (
 alter table public.questions enable row level security;
 
 -- Policies for Questions
-create policy "Everyone can view active questions"
+-- Allow authenticated users to view active questions
+create policy "Authenticated users can view active questions"
   on public.questions for select
+  to authenticated
+  using (is_active = true);
+
+-- Allow anonymous/public users to view active questions  
+create policy "Anonymous users can view active questions"
+  on public.questions for select
+  to anon
   using (is_active = true);
 
 -- Create Reflections Table
