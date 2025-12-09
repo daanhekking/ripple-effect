@@ -1,25 +1,23 @@
 'use client';
 
 import { useState } from 'react';
-import { Form, Input, Button, Select, Typography, Card, message } from 'antd';
+import { Form, Input, Button, Typography, Card, message } from 'antd';
 import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import { signup } from '@/lib/auth-actions';
 
 const { Title, Text } = Typography;
-const { Option } = Select;
 
 export default function SignupPage() {
     const [loading, setLoading] = useState(false);
 
-    const handleSignup = async (values: { email: string; password: string; name: string; role: string }) => {
+    const handleSignup = async (values: { email: string; password: string; name: string }) => {
         setLoading(true);
 
         const formData = new FormData();
         formData.append('email', values.email);
         formData.append('password', values.password);
         formData.append('name', values.name || '');
-        formData.append('role', values.role || 'employee');
 
         try {
             const result = await signup(formData);
@@ -70,7 +68,6 @@ export default function SignupPage() {
                     onFinish={handleSignup}
                     layout="vertical"
                     requiredMark={false}
-                    initialValues={{ role: 'employee' }}
                 >
                     <Form.Item
                         name="name"
@@ -114,17 +111,7 @@ export default function SignupPage() {
                             placeholder="••••••••"
                             size="large"
                         />
-                    </Form.Item>
 
-                    <Form.Item
-                        name="role"
-                        label="Role"
-                        rules={[{ required: true, message: 'Please select your role' }]}
-                    >
-                        <Select size="large" placeholder="Select your role">
-                            <Option value="employee">Employee</Option>
-                            <Option value="manager">Manager</Option>
-                        </Select>
                     </Form.Item>
 
                     <Form.Item style={{ marginBottom: '16px' }}>

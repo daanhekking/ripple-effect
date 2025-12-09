@@ -7,7 +7,6 @@ export async function signup(formData: FormData) {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
     const name = formData.get('name') as string;
-    const role = formData.get('role') as 'employee' | 'manager';
 
     // Validation
     if (!email || !password) {
@@ -28,7 +27,6 @@ export async function signup(formData: FormData) {
             emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://ripple-effect-theta.vercel.app'}/auth/confirm`,
             data: {
                 full_name: name,
-                role: role || 'employee',
             },
         },
     });
