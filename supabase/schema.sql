@@ -90,12 +90,11 @@ create policy "Managers can view their team's reflections"
 create or replace function public.handle_new_user()
 returns trigger as $$
 begin
-  insert into public.users (id, email, name, role)
+  insert into public.users (id, email, name)
   values (
     new.id, 
     new.email, 
-    new.raw_user_meta_data->>'full_name',
-    coalesce((new.raw_user_meta_data->>'role')::public.user_role, 'employee')
+    new.raw_user_meta_data->>'full_name'
   );
   return new;
 end;
